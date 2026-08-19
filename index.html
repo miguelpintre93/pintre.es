@@ -67,13 +67,28 @@
       opacity: 0.5;
     }
 
+    /* SECCIÓN 000 FIX ARRIBA Y SIN ACCIONES DE DESPLEGABLE */
+    .section-grid.static-header {
+      cursor: default;
+      margin-bottom: 0;
+    }
+
+    .section-grid.static-header .section-title {
+      cursor: pointer;
+    }
+
+    /* SECCIÓN 001 EMPUJA TODO LO DEMÁS HACIA LA PARTE INFERIOR */
+    .section-grid.push-bottom {
+      margin-top: auto;
+    }
+
     .bottom-divider {
       border-top: 1px solid #e5e5e5;
       margin-bottom: 20px;
     }
 
     footer.section-grid {
-      margin-top: auto;
+      margin-top: 0;
       margin-bottom: 0;
       padding-top: 12px;
       padding-bottom: 0;
@@ -105,10 +120,10 @@
     /* CONTENIDOS: EMPIEZAN EN LA COLUMNA 3 (CENTRADOS VERTICALMENTE) */
     .content-start-col3 {
       grid-column: 3 / span 2;
-      align-self: stretch; /* Ocupa todo el alto disponible para centrar */
+      align-self: stretch;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Centrado vertical entre las líneas */
+      justify-content: center;
       max-height: 0;
       opacity: 0;
       overflow: hidden;
@@ -238,14 +253,19 @@
       }
 
       .container {
-        min-height: auto;
-        display: block;
+        min-height: calc(100vh - 32px);
+        display: flex;
+        flex-direction: column;
       }
 
       .section-grid {
         grid-template-columns: 1fr;
         gap: 16px;
-        margin-bottom: 20px;
+        margin-bottom: 0;
+      }
+
+      .section-grid.push-bottom {
+        margin-top: auto;
       }
 
       .section-title,
@@ -282,8 +302,19 @@
 
   <div class="container">
 
+    <!-- 000 MIGUEL PINTRE -->
+    <section class="section-grid static-header">
+      <a href="#" class="section-title">
+        <span class="section-num">000</span>
+        <span>Miguel Pintre</span>
+      </a>
+    </section>
+
+    <!-- LÍNEA HORIZONTAL DEBAJO DEL 000 -->
+    <div class="bottom-divider" style="margin-bottom: 0;"></div>
+
     <!-- 001 PROFILE -->
-    <section class="section-grid">
+    <section class="section-grid push-bottom">
       <h2 class="section-title">
         <span class="section-num">001</span>
         <span>Profile</span>
@@ -452,7 +483,7 @@
 
   <script>
     document.querySelectorAll('.section-grid').forEach(section => {
-      if (section.tagName.toLowerCase() === 'footer') return;
+      if (section.tagName.toLowerCase() === 'footer' || section.classList.contains('static-header')) return;
 
       section.addEventListener('click', (e) => {
         if (e.target.closest('.content-start-col3')) return;
