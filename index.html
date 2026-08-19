@@ -47,7 +47,6 @@
       min-height: calc(100vh - 48px);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
 
     /* GRID ESTRUCTURAL GENERAL DE 4 COLUMNAS IGUALES */
@@ -56,34 +55,77 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 32px;
       border-top: 1px solid #e5e5e5;
-      padding-top: 20px;
-      margin-bottom: clamp(40px, 5vh, 80px);
+      padding-top: 12px;
+      padding-bottom: 12px;
+      margin-bottom: 0;
       align-items: start;
+      cursor: pointer;
+      transition: margin-bottom 0.4s ease, padding-bottom 0.4s ease;
+    }
+
+    .section-grid:hover .section-title {
+      opacity: 0.5;
+    }
+
+    .bottom-divider {
+      border-top: 1px solid #e5e5e5;
+      margin-bottom: 20px;
     }
 
     footer.section-grid {
+      margin-top: auto;
       margin-bottom: 0;
+      padding-top: 12px;
+      padding-bottom: 0;
+      border-top: none;
+      cursor: default;
     }
 
-    /* COLUMNA 1: TÍTULO NUMERADO (CON NEGRITA) */
+    footer.section-grid:hover .section-title {
+      opacity: 1;
+    }
+
+    /* COLUMNA 1: TÍTULO NUMERADO */
     .section-title {
       grid-column: 1;
       font-size: 14px;
-      font-weight: 600; /* Mantiene la negrita en títulos principales */
+      font-weight: 600;
       color: #000000;
       align-self: start;
       display: flex;
       gap: 20px;
+      user-select: none;
+      transition: opacity 0.2s ease;
     }
 
     .section-num {
       color: #000000;
     }
 
-    /* CONTENIDOS: EMPIEZAN EN LA COLUMNA 3 */
+    /* CONTENIDOS: EMPIEZAN EN LA COLUMNA 3 (CENTRADOS VERTICALMENTE) */
     .content-start-col3 {
       grid-column: 3 / span 2;
-      align-self: center;
+      align-self: stretch; /* Ocupa todo el alto disponible para centrar */
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* Centrado vertical entre las líneas */
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease;
+      cursor: default;
+    }
+
+    /* ESTADO DESPLEGADO */
+    .section-grid.active {
+      padding-bottom: 32px;
+      padding-top: 24px;
+    }
+
+    .section-grid.active .content-start-col3 {
+      max-height: 1000px;
+      opacity: 1;
+      transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in 0.1s;
     }
 
     /* 001 PROFILE */
@@ -105,10 +147,9 @@
       align-items: start;
     }
 
-    /* SUBTÍTULOS (SIN NEGRITA) */
     .subtitle {
       font-size: 14px;
-      font-weight: 400; /* Quitada la negrita de subtítulos */
+      font-weight: 400;
       margin-bottom: 12px;
       color: #777777;
     }
@@ -131,7 +172,7 @@
       margin-bottom: 4px;
     }
 
-    /* 003 ARCHIVE */
+    /* 003 PROJECTS */
     .archive-list {
       display: flex;
       flex-direction: column;
@@ -140,30 +181,45 @@
 
     .archive-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      padding: 8px 0;
+      grid-template-columns: 2fr 1.8fr 1.2fr;
+      gap: 24px;
+      padding: 10px 0;
       border-bottom: 1px solid #f0f0f0;
       align-items: center;
+    }
+
+    .archive-row:last-child {
+      border-bottom: none;
     }
 
     .archive-row:hover {
       background-color: #f9f9f9;
     }
 
+    .archive-row:hover .project-name {
+      text-decoration: underline;
+    }
+
     .archive-project {
       display: flex;
       align-items: center;
-      gap: 8px;
     }
 
-    .archive-bullet {
-      font-size: 10px;
+    .project-role {
+      color: #777777;
+      font-size: 13px;
     }
 
     .archive-category-year {
       display: flex;
       justify-content: space-between;
       color: #777777;
+      font-size: 13px;
+    }
+
+    /* 004 MUSIC SPOTIFY EMBED */
+    .spotify-embed-wrapper {
+      width: 100%;
     }
 
     /* FOOTER */
@@ -171,6 +227,8 @@
       text-align: right;
       font-size: 12px;
       color: #999999;
+      max-height: none;
+      opacity: 1;
     }
 
     /* MODOS VERTICALES Y PANTALLAS PEQUEÑAS */
@@ -187,7 +245,7 @@
       .section-grid {
         grid-template-columns: 1fr;
         gap: 16px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
       }
 
       .section-title,
@@ -207,12 +265,11 @@
 
       .archive-row {
         grid-template-columns: 1fr;
-        row-gap: 4px;
+        gap: 4px;
       }
 
       .archive-category-year {
-        flex-direction: column;
-        gap: 2px;
+        justify-content: space-between;
       }
 
       footer .copyright-right {
@@ -233,13 +290,11 @@
       </h2>
       
       <div class="content-start-col3">
-        <!-- Texto de la biografía -->
         <div class="profile-bio">
           <p>Operating at the intersection of architecture, stage technology, and museography, transforming complex physical spaces into immersive environments and narrative experiences. Guided by technical precision and spatial strategy, my practice spans technical project management, exhibition production, and interactive AV systems integration.</p>
           <p>Every project is approached as a balance between spatial design and execution—whether directing exhibition setups, coordinating technical hardware for immersive rooms, or managing large-scale productions for premier cultural institutions.</p>
         </div>
 
-        <!-- Capabilities (Columna 3) y Experience (Columna 4) -->
         <div class="profile-lists-grid">
           <div>
             <h3 class="subtitle">Capabilities</h3>
@@ -256,8 +311,8 @@
             <ul class="minimal-list nowrap-list">
               <li>— Production & Design Coordinator, INTERVENTO (Barcelona)</li>
               <li>— Technical Project Manager, Onionlab (Barcelona)</li>
-              <li>— Production Coordinator, INTERVENTO (Madrid)</li>
-              <li>— Junior Architect, FAKT (Berlin)</li>
+              <li>— Design Architect, INTERVENTO (Barcelona)</li>
+              <li>— Production Coordinator</li>
             </ul>
           </div>
         </div>
@@ -277,75 +332,114 @@
       </div>
     </section>
 
-    <!-- 003 ARCHIVE -->
+    <!-- 003 PROJECTS -->
     <section class="section-grid">
       <h2 class="section-title">
         <span class="section-num">003</span>
-        <span>Archive</span>
+        <span>Projects</span>
       </h2>
 
       <div class="content-start-col3 archive-list">
-        <!-- Fila 1 -->
-        <a href="#" class="archive-row">
+        <!-- 2025 -->
+        <a href="https://www.mnac.cat/es/una-corona-de-ojos" target="_blank" rel="noopener noreferrer" class="archive-row">
           <div class="archive-project">
-            <span class="archive-bullet">●</span>
-            <span>Lorem Ipsum — Dolor Sit Amet</span>
+            <span class="project-name">Una Corona de Ojos</span>
           </div>
+          <div class="project-role">Production & Installation</div>
           <div class="archive-category-year">
-            <span>Consectetur, Adipiscing</span>
-            <span>2026</span>
-          </div>
-        </a>
-
-        <!-- Fila 2 -->
-        <a href="#" class="archive-row">
-          <div class="archive-project">
-            <span class="archive-bullet">●</span>
-            <span>Eiusmod Tempor Incididunt</span>
-          </div>
-          <div class="archive-category-year">
-            <span>Labore, Dolore</span>
-            <span>2026</span>
-          </div>
-        </a>
-
-        <!-- Fila 3 -->
-        <a href="#" class="archive-row">
-          <div class="archive-project">
-            <span class="archive-bullet">●</span>
-            <span>Magna Aliqua Ut Enim</span>
-          </div>
-          <div class="archive-category-year">
-            <span>Minim, Veniam</span>
+            <span>MNAC</span>
             <span>2025</span>
           </div>
         </a>
 
-        <!-- Fila 4 -->
-        <a href="#" class="archive-row">
+        <!-- 2024 -->
+        <a href="https://layersofreality.com/es/alfa5" target="_blank" rel="noopener noreferrer" class="archive-row">
           <div class="archive-project">
-            <span class="archive-bullet">●</span>
-            <span>Quis Nostrud Exercitation</span>
+            <span class="project-name">Alfa5 XR</span>
           </div>
+          <div class="project-role">Technical Management</div>
           <div class="archive-category-year">
-            <span>Ullamco, Laboris</span>
-            <span>2025</span>
+            <span>ALFA5</span>
+            <span>2024</span>
           </div>
         </a>
 
-        <!-- Fila 5 -->
-        <a href="#" class="archive-row">
+        <!-- 2024 -->
+        <a href="https://interihotel.com" target="_blank" rel="noopener noreferrer" class="archive-row">
           <div class="archive-project">
-            <span class="archive-bullet">●</span>
-            <span>Aliquip Ex Ea Commodo</span>
+            <span class="project-name">Entre Espacios</span>
           </div>
+          <div class="project-role">AV & Production Coordination</div>
           <div class="archive-category-year">
-            <span>Duis, Irure</span>
-            <span>2025</span>
+            <span>IFEMA</span>
+            <span>2024</span>
+          </div>
+        </a>
+
+        <!-- 2023 -->
+        <a href="https://caixaforum.org/es/barcelona/p/el-arbol-de-lo-que-aun-no-sabes_a163775086" target="_blank" rel="noopener noreferrer" class="archive-row">
+          <div class="archive-project">
+            <span class="project-name">El Árbol de lo que Aún no Sabes</span>
+          </div>
+          <div class="project-role">Production & Coordination</div>
+          <div class="archive-category-year">
+            <span>CaixaForum Barcelona</span>
+            <span>2023</span>
+          </div>
+        </a>
+
+        <!-- 2022 -->
+        <a href="https://www.lacasaencendida.es/exposiciones/generaciones-2022" target="_blank" rel="noopener noreferrer" class="archive-row">
+          <div class="archive-project">
+            <span class="project-name">Generaciones 2022</span>
+          </div>
+          <div class="project-role">Artwork Transport & Setup</div>
+          <div class="archive-category-year">
+            <span>La Casa Encendida</span>
+            <span>2022</span>
+          </div>
+        </a>
+
+        <!-- 2022 -->
+        <a href="https://ca2m.org/exposiciones/alvaro-perdices-ornamento-y-delito" target="_blank" rel="noopener noreferrer" class="archive-row">
+          <div class="archive-project">
+            <span class="project-name">Ornamento y Delito</span>
+          </div>
+          <div class="project-role">Installation Coordination</div>
+          <div class="archive-category-year">
+            <span>CA2M</span>
+            <span>2022</span>
+          </div>
+        </a>
+
+        <!-- 2021 -->
+        <a href="https://coleccionsolo.com/es/exhibitions/el-jardin-de-las-delicias-2/" target="_blank" rel="noopener noreferrer" class="archive-row">
+          <div class="archive-project">
+            <span class="project-name">El Jardín de las Delicias</span>
+          </div>
+          <div class="project-role">Exhibition Setup Direction</div>
+          <div class="archive-category-year">
+            <span>Matadero Madrid</span>
+            <span>2021</span>
           </div>
         </a>
       </div>
     </section>
+
+    <!-- 004 MUSIC -->
+    <section class="section-grid">
+      <h2 class="section-title">
+        <span class="section-num">004</span>
+        <span>Music</span>
+      </h2>
+
+      <div class="content-start-col3 spotify-embed-wrapper">
+        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6lQCHixccKWaMnkvjSY74R?utm_source=generator&si=3de48b99bbb347f9" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- LÍNEA DIVISORIA INFERIOR -->
+    <div class="bottom-divider"></div>
 
     <!-- FOOTER -->
     <footer class="section-grid">
@@ -355,6 +449,17 @@
     </footer>
 
   </div>
+
+  <script>
+    document.querySelectorAll('.section-grid').forEach(section => {
+      if (section.tagName.toLowerCase() === 'footer') return;
+
+      section.addEventListener('click', (e) => {
+        if (e.target.closest('.content-start-col3')) return;
+        section.classList.toggle('active');
+      });
+    });
+  </script>
 
 </body>
 </html>
